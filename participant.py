@@ -11,39 +11,26 @@ class Participant:
 
     def get_hand_value(self):
         value = 0
-        soft = False
+        aces = 0
+
         for card in self.hand:
             if card == "A":
-                value += 1
-            elif card == "2":
-                value += 2
-            elif card == "3":
-                value += 3
-            elif card == "4":
-                value += 4
-            elif card == "5":
-                value += 5
-            elif card == "6":
-                value += 6
-            elif card == "7":
-                value += 7
-            elif card == "8":
-                value += 8
-            elif card == "9":
-                value += 9
-            elif card == "10":
+                aces += 1
+                value += 11
+            elif card in ("K", "Q", "J"):
                 value += 10
-            elif card == "J":
-                value += 10
-            elif card == "Q":
-                value += 10
-            elif card == "K":
-                value += 10
-        for card in self.hand:
-            if card == "A" and value <= 11:
-                value += 10
-                soft = True
-        return value, soft
+            else:
+                value += int(card)
+
+        while value > 21 and aces > 0:
+            value -= 10
+            aces -= 1
+
+        is_soft = aces > 0
+        return value, is_soft
+
+    def has_blackjack(self):
+        return len(self.hand) == 2 and self.get_hand_value()[0] == 21
 
     def hit(self, deck):
         self.draw(deck)
