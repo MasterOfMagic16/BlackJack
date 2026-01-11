@@ -11,7 +11,8 @@ winnings_list = []
 
 time_step = 1
 while time_step <= rounds:
-    game_instance.play_round(bet=10)
+    bet = max(10, -game_instance.player.winnings)
+    game_instance.play_round(bet=bet)
     time_list.append(time_step)
     winnings_list.append(game_instance.player.winnings)
     time_step += 1
